@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "221435480509",
+    "project_id": "fake-taxi-app",
+    "storage_bucket": "fake-taxi-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:221435480509:android:dbd3a423527e5ecce86ad4",
+        "android_client_info": {
+          "package_name": "com.theyestech.fake_taxi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "221435480509-gvbh2ek1cdfmpj85qipeg5ldmarujq2h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsUujeVvxzweMRvGN68AF0MNFlidjhM4U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "221435480509-gvbh2ek1cdfmpj85qipeg5ldmarujq2h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
