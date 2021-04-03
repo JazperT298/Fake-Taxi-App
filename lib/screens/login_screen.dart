@@ -1,6 +1,7 @@
 import 'package:fake_taxi/main.dart';
 import 'package:fake_taxi/screens/home_screen.dart';
 import 'package:fake_taxi/screens/register_screen.dart';
+import 'package:fake_taxi/widgets/progress_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -131,11 +132,16 @@ class LoginScreen extends StatelessWidget {
   }
 
   void loginAndAuthenticateUser(BuildContext context) async {
+
+    showDialog(context: context, barrierDismissible: false, builder: (context) {
+      return ProgressDialog(message: "Authenticating, Please wait...",);
+    });
     final User user = (await firebaseAuth
             .signInWithEmailAndPassword(
                 email: emailTextEditingController.text,
                 password: passwordTextEditingController.text)
             .catchError((errMsg) {
+              Navigator.pop(context);
       Fluttertoast.showToast(msg: "Error: " + errMsg.toString());
     }))
         .user;
@@ -148,10 +154,12 @@ class LoginScreen extends StatelessWidget {
               Navigator.pushNamedAndRemoveUntil(
                   context, HomeScreen.idScreen, (route) => false);
             } else {
+              Navigator.pop(context);
               Fluttertoast.showToast(msg: "Invalid credentials");
             }
           });
     } else {
+      Navigator.pop(context);
       Fluttertoast.showToast(msg: "An error occurred, cannot sign in!");
     }
   }

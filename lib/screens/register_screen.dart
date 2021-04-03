@@ -1,6 +1,7 @@
 import 'package:fake_taxi/main.dart';
 import 'package:fake_taxi/screens/home_screen.dart';
 import 'package:fake_taxi/screens/login_screen.dart';
+import 'package:fake_taxi/widgets/progress_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
@@ -175,11 +176,15 @@ class RegisterScreen extends StatelessWidget {
   }
 
   void registerNewUser(BuildContext context) async {
+    showDialog(context: context, barrierDismissible: false, builder: (context) {
+      return ProgressDialog(message: "Registering, Please wait...",);
+    });
     final User user = (await firebaseAuth
             .createUserWithEmailAndPassword(
                 email: emailTextEditingController.text,
                 password: passwordTextEditingController.text)
             .catchError((errMsg) {
+      Navigator.pop(context);
       Fluttertoast.showToast(msg: "Error: " + errMsg.toString());
     }))
         .user;
@@ -192,12 +197,13 @@ class RegisterScreen extends StatelessWidget {
         "email": emailTextEditingController.text.trim(),
         "phone": phoneTextEditingController.text.trim(),
       };
-
+      //Navigator.pop(context);
       usersRef.child(user.uid).set(userDataMap);
       Fluttertoast.showToast(msg: "New user account has been created!");
 
       Navigator.pushNamedAndRemoveUntil(context, HomeScreen.idScreen, (route) => false);
     }else{
+      Navigator.pop(context);
       Fluttertoast.showToast(msg: "New user account has not been created!");
     }
   }
