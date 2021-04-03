@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
+  static const String idScreen = "mainScreen";
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
