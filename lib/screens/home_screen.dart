@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:fake_taxi/widgets/divider.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,6 +16,20 @@ class _HomeScreenState extends State<HomeScreen> {
   GoogleMapController newGoogleMapController;
 
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  Position currentPosition;
+  var geoLocator = Geolocator();
+  double bottomPaddingOfMap = 0;
+
+  void locatePosition() async {
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    currentPosition = position;
+
+    LatLng latLngPosition = LatLng(position.latitude, position.longitude);
+
+    CameraPosition cameraPosition = new CameraPosition(target: latLngPosition, zoom: 15);
+    newGoogleMapController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+  }
 
   static final CameraPosition _kGooglePlex = CameraPosition(
     target: LatLng(8.507651591446564, 124.6533884950392),
@@ -110,12 +125,20 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Stack(
         children: [
           GoogleMap(
+            padding: EdgeInsets.only(bottom:  bottomPaddingOfMap),
             initialCameraPosition: _kGooglePlex,
             mapType: MapType.normal,
             myLocationEnabled: true,
+            zoomGesturesEnabled: true,
+            zoomControlsEnabled: true,
             onMapCreated: (GoogleMapController controller) {
               _controller.complete(controller);
               newGoogleMapController = controller;
+              setState(() {
+                //bottomPaddingOfMap = 300.0;
+              });
+
+              locatePosition();
             },
           ),
           //Hamburger button for drawer
@@ -160,7 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
             right: 0.0,
             bottom: 0.0,
             child: Container(
-              height: 320.0,
+              height: 300.0,
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
