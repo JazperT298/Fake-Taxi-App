@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:fake_taxi/datahandler/app_data.dart';
 import 'package:fake_taxi/services/services_method.dart';
 import 'package:fake_taxi/widgets/divider.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String idScreen = "mainScreen";
@@ -31,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
     CameraPosition cameraPosition = new CameraPosition(target: latLngPosition, zoom: 15);
     newGoogleMapController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
 
-    String address = await ServicesMethod.searchCoordinateAddress(position);
+    String address = await ServicesMethod.searchCoordinateAddress(position, context);
     print("This is your address " + address);
   }
 
@@ -269,8 +271,13 @@ class _HomeScreenState extends State<HomeScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "Add Home",
+                            Container(
+                              // margin: EdgeInsets.only(right: 13.0),
+                              width: MediaQuery.of(context).size.width / 1.30,
+                              child: Text(
+                                Provider.of<AppData>(context).pickUpLocation != null ? Provider.of<AppData>(context).pickUpLocation.placeName : "Add Home",
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                             SizedBox(
                               height: 4.0,
@@ -305,8 +312,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "Add Work",
+                            Container(
+                              width: MediaQuery.of(context).size.width / 1.30,
+                              child: Text(
+                                "Add Work",
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                             SizedBox(
                               height: 4.0,
