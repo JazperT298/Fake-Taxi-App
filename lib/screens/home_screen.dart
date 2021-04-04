@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:fake_taxi/config_maps.dart';
 import 'package:fake_taxi/datahandler/app_data.dart';
 import 'package:fake_taxi/models/direct_detials.dart';
 import 'package:fake_taxi/screens/search_screen.dart';
 import 'package:fake_taxi/services/services_method.dart';
 import 'package:fake_taxi/widgets/divider.dart';
 import 'package:fake_taxi/widgets/progress_dialog.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -43,13 +45,60 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   bool drawerOpen = true;
 
-  void displayRequestRideContainer(){
+  DatabaseReference rideRequestRef;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    ServicesMethod.getCurrentOnlineUserInfo();
+  }
+
+  void saveRideRequest() {
+    rideRequestRef =
+        FirebaseDatabase.instance.reference().child("Ride Requests").push();
+
+    var pickUp = Provider.of<AppData>(context, listen: false).pickUpLocation;
+    var dropOff = Provider.of<AppData>(context, listen: false).dropOffLocation;
+
+    Map pickUpLocationMap = {
+      "latitude": pickUp.latitude.toString(),
+      "longtitude": pickUp.longtitude.toString()
+    };
+
+    Map dropOffLocationMap = {
+      "latitude": dropOff.latitude.toString(),
+      "longtitude": dropOff.longtitude.toString()
+    };
+
+    Map rideInfoMap = {
+      "driver_id": "waiting",
+      "payment": "cash",
+      "pickup": pickUpLocationMap,
+      "dropoff": dropOffLocationMap,
+      "create_at": DateTime.now().toString(),
+      "rider_name": userCurrentInfo.name,
+      "rider_phone": userCurrentInfo.phone,
+      "pickup_address": pickUp.placeName,
+      "dropoff_address": dropOff.placeName,
+    };
+
+    rideRequestRef.set(rideInfoMap);
+  }
+
+  void cancelRideRequest(){
+    rideRequestRef.remove();
+  }
+
+  void displayRequestRideContainer() {
     setState(() {
       requestRideContainerHeight = 165.0;
       rideDetailsContainerHeight = 0;
       bottomPaddingOfMap = 230;
       drawerOpen = false;
     });
+
+    saveRideRequest();
   }
 
   resetApp() {
@@ -57,6 +106,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       drawerOpen = true;
       searchContainerHeight = 280.0;
       rideDetailsContainerHeight = 0.0;
+      requestRideContainerHeight = 0.0;
       bottomPaddingOfMap = 230;
 
       polylineSet.clear();
@@ -667,17 +717,23 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     SizedBox(
                       height: 18.0,
                     ),
-                    Container(
-                      height: 50.0,
-                      width: 50.0,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(26.0),
-                        border: Border.all(width: 1, color: Colors.black54),
-                      ),
-                      child: Icon(
-                        Icons.close,
-                        size: 26.0,
+                    InkWell(
+                      onTap: () {
+                        cancelRideRequest();
+                        resetApp();
+                      },
+                      child: Container(
+                        height: 50.0,
+                        width: 50.0,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(26.0),
+                          border: Border.all(width: 1, color: Colors.black54),
+                        ),
+                        child: Icon(
+                          Icons.close,
+                          size: 26.0,
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -691,7 +747,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         style: TextStyle(
                           fontSize: 16.0,
                           fontWeight: FontWeight.bold,
-
                         ),
                       ),
                     )
