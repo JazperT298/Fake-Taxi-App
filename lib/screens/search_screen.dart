@@ -1,4 +1,6 @@
+import 'package:fake_taxi/config_maps.dart';
 import 'package:fake_taxi/datahandler/app_data.dart';
+import 'package:fake_taxi/services/request_services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,8 +14,9 @@ class _SearchScreenState extends State<SearchScreen> {
   TextEditingController dropOffTextEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-
-    String placeAddress = Provider.of<AppData>(context, listen: false).pickUpLocation.placeName ?? "";
+    String placeAddress =
+        Provider.of<AppData>(context, listen: false).pickUpLocation.placeName ??
+            "";
     pickupTextEditingController.text = placeAddress;
 
     return Scaffold(
@@ -22,8 +25,10 @@ class _SearchScreenState extends State<SearchScreen> {
           child: Column(
             children: [
               Container(
-                height: 215.0,
-                decoration: BoxDecoration(color: Colors.white, boxShadow: [
+                height: 175.0,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                    boxShadow: [
                   BoxShadow(
                     color: Colors.black,
                     blurRadius: 6.0,
@@ -33,7 +38,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       0.7,
                     ),
                   ),
-                ]),
+                ],
+                ),
                 child: Padding(
                   padding: EdgeInsets.only(
                     left: 25.0,
@@ -127,6 +133,9 @@ class _SearchScreenState extends State<SearchScreen> {
                               child: Padding(
                                 padding: EdgeInsets.all(3.0),
                                 child: TextField(
+                                  onChanged: (val) {
+                                    findPlace(dropOffTextEditingController.text);
+                                  },
                                   controller: dropOffTextEditingController,
                                   decoration: InputDecoration(
                                     hintText: "Where to?",
@@ -152,5 +161,19 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ),
     );
+  }
+
+  void findPlace(String placeName) async {
+    if(placeName.length > 1) {
+      String autoComplete = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placeName&key=$mapKey&sessiontoken=1234567890&components=country:PH";
+
+      var res = await RequestServices.getRequest(autoComplete);
+
+      if(res == "failed"){
+        return;
+      }
+      print("Places prediction response");
+      print(res);
+    }
   }
 }
