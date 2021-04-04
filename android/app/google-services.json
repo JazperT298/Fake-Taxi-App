@@ -1,33 +1,34 @@
 {
   "project_info": {
-    "project_number": "221435480509",
-    "project_id": "fake-taxi-app",
-    "storage_bucket": "fake-taxi-app.appspot.com"
+    "project_number": "694924654528",
+    "firebase_url": "https://flutter-fake-taxi-309623-default-rtdb.firebaseio.com",
+    "project_id": "flutter-fake-taxi-309623",
+    "storage_bucket": "flutter-fake-taxi-309623.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:221435480509:android:dbd3a423527e5ecce86ad4",
+        "mobilesdk_app_id": "1:694924654528:android:0c87e5b0c782bba9e8fa25",
         "android_client_info": {
           "package_name": "com.theyestech.fake_taxi"
         }
       },
       "oauth_client": [
         {
-          "client_id": "221435480509-gvbh2ek1cdfmpj85qipeg5ldmarujq2h.apps.googleusercontent.com",
+          "client_id": "694924654528-6o4fggg8t40qb0t4euhjsr66pag1la5b.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDsUujeVvxzweMRvGN68AF0MNFlidjhM4U"
+          "current_key": "AIzaSyBHekMm3Io_ftJUd-FGapD5nqGCffbPcAw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "221435480509-gvbh2ek1cdfmpj85qipeg5ldmarujq2h.apps.googleusercontent.com",
+              "client_id": "694924654528-6o4fggg8t40qb0t4euhjsr66pag1la5b.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

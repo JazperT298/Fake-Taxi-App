@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fake_taxi/services/services_method.dart';
 import 'package:fake_taxi/widgets/divider.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -29,6 +30,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
     CameraPosition cameraPosition = new CameraPosition(target: latLngPosition, zoom: 15);
     newGoogleMapController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+
+    String address = await ServicesMethod.searchCoordinateAddress(position);
+    print("This is your address " + address);
   }
 
   static final CameraPosition _kGooglePlex = CameraPosition(
@@ -135,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
               _controller.complete(controller);
               newGoogleMapController = controller;
               setState(() {
-                //bottomPaddingOfMap = 300.0;
+                bottomPaddingOfMap = 280.0;
               });
 
               locatePosition();
@@ -183,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
             right: 0.0,
             bottom: 0.0,
             child: Container(
-              height: 300.0,
+              height: 280.0,
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -251,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: 24.0,
+                      height: 20.0,
                     ),
                     Row(
                       children: [
