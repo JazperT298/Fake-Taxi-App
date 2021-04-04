@@ -1,6 +1,8 @@
 import 'package:fake_taxi/config_maps.dart';
 import 'package:fake_taxi/datahandler/app_data.dart';
+import 'package:fake_taxi/models/place_predictions.dart';
 import 'package:fake_taxi/services/request_services.dart';
+import 'package:fake_taxi/widgets/divider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +14,7 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   TextEditingController pickupTextEditingController = TextEditingController();
   TextEditingController dropOffTextEditingController = TextEditingController();
+  List<PlacePredictions> placePredictionList = [];
   @override
   Widget build(BuildContext context) {
     String placeAddress =
@@ -28,17 +31,17 @@ class _SearchScreenState extends State<SearchScreen> {
                 height: 175.0,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                    boxShadow: [
-                  BoxShadow(
-                    color: Colors.black,
-                    blurRadius: 6.0,
-                    spreadRadius: 0.5,
-                    offset: Offset(
-                      0.7,
-                      0.7,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black,
+                      blurRadius: 6.0,
+                      spreadRadius: 0.5,
+                      offset: Offset(
+                        0.7,
+                        0.7,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
                 ),
                 child: Padding(
                   padding: EdgeInsets.only(
@@ -134,7 +137,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                 padding: EdgeInsets.all(3.0),
                                 child: TextField(
                                   onChanged: (val) {
-                                    findPlace(dropOffTextEditingController.text);
+                                    findPlace(
+                                        dropOffTextEditingController.text);
                                   },
                                   controller: dropOffTextEditingController,
                                   decoration: InputDecoration(
@@ -156,6 +160,28 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                 ),
               ),
+              //Tile for prediction
+
+              (placePredictionList.length > 0)
+                  ? Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                      child: ListView.separated(
+                          padding: EdgeInsets.all(0.0),
+
+                          separatorBuilder: (BuildContext context, int index) =>
+                              DividerWidget(),
+                          itemCount: placePredictionList.length,
+                        itemBuilder: (context, index) {
+                          return PredictionTile(
+                            placePredictions: placePredictionList[index],
+                          );
+                        },
+                        shrinkWrap: true,
+                        physics: ClampingScrollPhysics(),
+                      ),
+                    )
+                  : Container(),
             ],
           ),
         ),
@@ -164,16 +190,85 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void findPlace(String placeName) async {
-    if(placeName.length > 1) {
-      String autoComplete = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placeName&key=$mapKey&sessiontoken=1234567890&components=country:PH";
+    if (placeName.length > 1) {
+      String autoComplete =
+          "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placeName&key=$mapKey&sessiontoken=1234567890&components=country:PH";
 
       var res = await RequestServices.getRequest(autoComplete);
 
-      if(res == "failed"){
+      if (res == "failed") {
         return;
       }
-      print("Places prediction response");
-      print(res);
+      if (res["status"] == "OK") {
+        var predictions = res["predictions"];
+        print(predictions);
+        var placesList = (predictions as List)
+            .map((e) => PlacePredictions.fromJson(e))
+            .toList();
+
+        setState(() {
+          placePredictionList = placesList;
+
+
+        });
+      }
     }
+  }
+}
+
+class PredictionTile extends StatelessWidget {
+  final PlacePredictions placePredictions;
+  PredictionTile({Key key, this.placePredictions}) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Container(
+      margin: EdgeInsets.only(left: 10, top: 15),
+      height: 50.0,
+      child: Column(
+        children: [
+          // SizedBox(
+          //   width: 10.0,
+          // ),
+          Row(
+            children: [
+              Icon(
+                Icons.add_location,
+              ),
+              SizedBox(
+                width: 14.0,
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                     placePredictions.mainText,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 16.0,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 3.0,
+                    ),
+                    Text(
+                      placePredictions.secondaryText,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 12.0, color: Colors.grey),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+          // SizedBox(
+          //   width: 10.0,
+          // ),
+        ],
+      ),
+    );
   }
 }

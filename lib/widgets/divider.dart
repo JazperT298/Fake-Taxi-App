@@ -5,7 +5,7 @@ class DividerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Divider(
       height: 1.0,
-      color: Colors.yellowAccent,
+      color: Colors.grey[300],
       thickness: 1.0,
     );
   }
