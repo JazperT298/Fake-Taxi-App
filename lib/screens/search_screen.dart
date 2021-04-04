@@ -1,8 +1,10 @@
 import 'package:fake_taxi/config_maps.dart';
 import 'package:fake_taxi/datahandler/app_data.dart';
+import 'package:fake_taxi/models/address.dart';
 import 'package:fake_taxi/models/place_predictions.dart';
 import 'package:fake_taxi/services/request_services.dart';
 import 'package:fake_taxi/widgets/divider.dart';
+import 'package:fake_taxi/widgets/progress_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -224,51 +226,78 @@ class PredictionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Container(
-      margin: EdgeInsets.only(left: 10, top: 15),
-      height: 50.0,
-      child: Column(
-        children: [
-          // SizedBox(
-          //   width: 10.0,
-          // ),
-          Row(
-            children: [
-              Icon(
-                Icons.add_location,
-              ),
-              SizedBox(
-                width: 14.0,
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                     placePredictions.mainText,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 16.0,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 3.0,
-                    ),
-                    Text(
-                      placePredictions.secondaryText,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 12.0, color: Colors.grey),
-                    ),
-                  ],
+    return MaterialButton(
+      onPressed: () {
+        getPlaceAddressDetails(placePredictions.placeId, context);
+      },
+      child: Container(
+        margin: EdgeInsets.only(left: 0, top: 15),
+        height: 50.0,
+        child: Column(
+          children: [
+            // SizedBox(
+            //   width: 10.0,
+            // ),
+            Row(
+              children: [
+                Icon(
+                  Icons.add_location,
                 ),
-              )
-            ],
-          ),
-          // SizedBox(
-          //   width: 10.0,
-          // ),
-        ],
+                SizedBox(
+                  width: 14.0,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                       placePredictions.mainText,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 16.0,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 3.0,
+                      ),
+                      Text(
+                        placePredictions.secondaryText,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 12.0, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+            // SizedBox(
+            //   width: 10.0,
+            // ),
+          ],
+        ),
       ),
     );
+  }
+
+  void getPlaceAddressDetails(String placeId, context)async {
+    showDialog(context: context, builder: (BuildContext context) => ProgressDialog(message: "Setting Dropoff, Please wait",));
+    String placeDetailsUrl = "https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&key=$mapKey";
+
+    var res = await RequestServices.getRequest(placeDetailsUrl);
+    Navigator.pop(context);
+    if(res == "failed"){
+      return;
+    }
+    if(res["status"] == "OK"){
+      Address address = Address();
+      address.placeName = res["result"]["name"];
+      address.placeId = placeId;
+      address.latitude = res["result"]["geometry"]["location"]["lat"];
+      address.longtitude = res["result"]["geometry"]["location"]["lng"];
+
+      Provider.of<AppData>(context, listen: false).updateDropOffLocationAddress(address);
+      print("This is drop off");
+      print(address.placeName);
+    }
   }
 }
