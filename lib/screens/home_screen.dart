@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:fake_taxi/datahandler/app_data.dart';
+import 'package:fake_taxi/models/direct_detials.dart';
 import 'package:fake_taxi/screens/search_screen.dart';
 import 'package:fake_taxi/services/services_method.dart';
 import 'package:fake_taxi/widgets/divider.dart';
@@ -23,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
   GoogleMapController newGoogleMapController;
 
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  DirectionDetails tripDirectionDetails;
 
   List<LatLng> polylineCoordinates = [];
   Set<Polyline> polylineSet = {};
@@ -37,6 +39,23 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
   double rideDetailsContainerHeight = 0;
   double searchContainerHeight = 280.0;
 
+  bool drawerOpen = true;
+
+  resetApp() {
+    setState(() {
+      drawerOpen = true;
+      searchContainerHeight = 280.0;
+      rideDetailsContainerHeight = 0.0;
+      bottomPaddingOfMap = 230;
+
+      polylineSet.clear();
+      markersSet.clear();
+      circlesSet.clear();
+      polylineCoordinates.clear();
+    });
+    locatePosition();
+  }
+
   void displayRideDetailsContainer() async {
     await getPlaceDirection();
 
@@ -44,6 +63,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
       searchContainerHeight = 0;
       rideDetailsContainerHeight = 230.0;
       bottomPaddingOfMap = 230;
+      drawerOpen = false;
     });
   }
 
@@ -187,11 +207,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
           ),
           //Hamburger button for drawer
           Positioned(
-            top: 45.0,
+            top: 38.0,
             left: 22.0,
             child: GestureDetector(
               onTap: () {
-                scaffoldKey.currentState.openDrawer();
+                if(drawerOpen){
+                  scaffoldKey.currentState.openDrawer();
+                }else{
+                  resetApp();
+                }
+
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -211,7 +236,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                 child: CircleAvatar(
                   backgroundColor: Colors.white,
                   child: Icon(
-                    Icons.menu,
+                    drawerOpen ? Icons.menu : Icons.close,
                     color: Colors.black,
                   ),
                   radius: 20.0,
@@ -454,13 +479,22 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                                     ),
                                   ),
                                   Text(
-                                    '10km',
+                                    ((tripDirectionDetails != null ? tripDirectionDetails.distanceText : '' )),
                                     style: TextStyle(
                                       fontSize: 16.0,
                                       fontFamily: "Brand bold",
                                     ),
                                   ),
                                 ],
+                              ),
+                              Expanded(
+                                child: Container(),
+                              ),
+                              Text(
+                                ((tripDirectionDetails != null ? '\₱ ' + '${ServicesMethod.calculateFares(tripDirectionDetails)}': '')),
+                                style: TextStyle(
+                                  fontFamily: "Brand bold",
+                                ),
                               ),
                             ],
                           ),
@@ -554,6 +588,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
 
     var details = await ServicesMethod.getPlaceDirectionDetails(
         pickupLatLng, dropOffLatLng);
+    setState(() {
+      tripDirectionDetails = details;
+    });
 
     Navigator.pop(context);
     print("This is encoded points");

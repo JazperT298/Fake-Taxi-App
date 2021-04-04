@@ -55,4 +55,18 @@ class ServicesMethod{
 
     return directionDetails;
   }
+
+  static int calculateFares(DirectionDetails directionDetails){
+    //in terms of USD
+    double timeTraveledFare = (directionDetails.durationValue / 60) * 0.20;
+    double distanceTraveledFare = (directionDetails.durationValue / 1000) * 0.20;
+
+    double totalFareAmount= timeTraveledFare + distanceTraveledFare;
+
+    //Local Currency
+    //1$ = 50 PESO
+    double totalLocalAmount = totalFareAmount * 50;
+
+    return totalLocalAmount.truncate();
+  }
 }
