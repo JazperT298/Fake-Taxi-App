@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:fake_taxi/datahandler/app_data.dart';
 import 'package:fake_taxi/models/direct_detials.dart';
 import 'package:fake_taxi/screens/search_screen.dart';
@@ -19,7 +20,7 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Completer<GoogleMapController> _controller = Completer();
   GoogleMapController newGoogleMapController;
 
@@ -38,8 +39,18 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
 
   double rideDetailsContainerHeight = 0;
   double searchContainerHeight = 280.0;
+  double requestRideContainerHeight = 0;
 
   bool drawerOpen = true;
+
+  void displayRequestRideContainer(){
+    setState(() {
+      requestRideContainerHeight = 165.0;
+      rideDetailsContainerHeight = 0;
+      bottomPaddingOfMap = 230;
+      drawerOpen = false;
+    });
+  }
 
   resetApp() {
     setState(() {
@@ -211,12 +222,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
             left: 22.0,
             child: GestureDetector(
               onTap: () {
-                if(drawerOpen){
+                if (drawerOpen) {
                   scaffoldKey.currentState.openDrawer();
-                }else{
+                } else {
                   resetApp();
                 }
-
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -269,7 +279,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                       ),
                     ]),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -351,7 +362,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                                 // margin: EdgeInsets.only(right: 13.0),
                                 width: MediaQuery.of(context).size.width / 1.30,
                                 child: Text(
-                                  Provider.of<AppData>(context).pickUpLocation !=
+                                  Provider.of<AppData>(context)
+                                              .pickUpLocation !=
                                           null
                                       ? Provider.of<AppData>(context)
                                           .pickUpLocation
@@ -479,7 +491,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                                     ),
                                   ),
                                   Text(
-                                    ((tripDirectionDetails != null ? tripDirectionDetails.distanceText : '' )),
+                                    ((tripDirectionDetails != null
+                                        ? tripDirectionDetails.distanceText
+                                        : '')),
                                     style: TextStyle(
                                       fontSize: 16.0,
                                       fontFamily: "Brand bold",
@@ -491,7 +505,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                                 child: Container(),
                               ),
                               Text(
-                                ((tripDirectionDetails != null ? '\₱ ' + '${ServicesMethod.calculateFares(tripDirectionDetails)}': '')),
+                                ((tripDirectionDetails != null
+                                    ? '\₱ ' +
+                                        '${ServicesMethod.calculateFares(tripDirectionDetails)}'
+                                    : '')),
                                 style: TextStyle(
                                   fontFamily: "Brand bold",
                                 ),
@@ -535,7 +552,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 16.0),
                         child: MaterialButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            displayRequestRideContainer();
+                          },
                           color: Theme.of(context).accentColor,
                           child: Padding(
                             padding: EdgeInsets.all(17.0),
@@ -545,11 +564,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                                 Text(
                                   'Request',
                                   style: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white
-
-                                  ),
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
                                 ),
                                 Icon(
                                   FontAwesomeIcons.taxi,
@@ -563,6 +580,122 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin{
                       )
                     ],
                   ),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 0.0,
+            left: 0.0,
+            right: 0.0,
+            child: Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16.0),
+                    topRight: Radius.circular(16.0),
+                  ),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(
+                      spreadRadius: 0.5,
+                      blurRadius: 16.0,
+                      color: Colors.black54,
+                      offset: Offset(0.7, 0.7),
+                    )
+                  ]),
+              height: requestRideContainerHeight,
+              child: Padding(
+                padding: EdgeInsets.all(10.0),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 18.0,
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: AnimatedTextKit(
+                        animatedTexts: [
+                          ColorizeAnimatedText(
+                            'Requesting a Ride...',
+                            textAlign: TextAlign.center,
+                            textStyle: TextStyle(
+                              fontSize: 30.0,
+                              fontFamily: 'Brand Bold',
+                            ),
+                            colors: [
+                              Colors.purple,
+                              Colors.blue,
+                              Colors.yellow,
+                              Colors.red,
+                            ],
+                          ),
+                          ColorizeAnimatedText(
+                            'Please wait...',
+                            textAlign: TextAlign.center,
+                            textStyle: TextStyle(
+                              fontSize: 30.0,
+                              fontFamily: 'Brand Bold',
+                            ),
+                            colors: [
+                              Colors.purple,
+                              Colors.blue,
+                              Colors.yellow,
+                              Colors.red,
+                            ],
+                          ),
+                          ColorizeAnimatedText(
+                            'Finding a Driver...',
+                            textAlign: TextAlign.center,
+                            textStyle: TextStyle(
+                              fontSize: 30.0,
+                              fontFamily: 'Brand Bold',
+                            ),
+                            colors: [
+                              Colors.purple,
+                              Colors.blue,
+                              Colors.yellow,
+                              Colors.red,
+                            ],
+                          ),
+                        ],
+                        isRepeatingAnimation: true,
+                        onTap: () {
+                          print("Tap Event");
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      height: 18.0,
+                    ),
+                    Container(
+                      height: 50.0,
+                      width: 50.0,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(26.0),
+                        border: Border.all(width: 1, color: Colors.black54),
+                      ),
+                      child: Icon(
+                        Icons.close,
+                        size: 26.0,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Container(
+                      width: double.infinity,
+                      child: Text(
+                        'Cancel Ride',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
             ),

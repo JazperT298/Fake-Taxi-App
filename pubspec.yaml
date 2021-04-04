@@ -38,6 +38,7 @@ dependencies:
   provider: ^5.0.0
   flutter_polyline_points: ^0.2.6
   font_awesome_flutter: ^9.0.0
+  animated_text_kit: ^4.1.1
 
 dev_dependencies:
   flutter_test:
