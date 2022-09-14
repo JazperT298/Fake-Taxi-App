@@ -19,9 +19,7 @@ class _SearchScreenState extends State<SearchScreen> {
   List<PlacePredictions> placePredictionList = [];
   @override
   Widget build(BuildContext context) {
-    String placeAddress =
-        Provider.of<AppData>(context, listen: false).pickUpLocation.placeName ??
-            "";
+    String placeAddress = Provider.of<AppData>(context, listen: false).pickUpLocation.placeName ?? "";
     pickupTextEditingController.text = placeAddress;
 
     return Scaffold(
@@ -107,8 +105,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                     filled: true,
                                     border: InputBorder.none,
                                     isDense: true,
-                                    contentPadding: EdgeInsets.only(
-                                        left: 11.0, top: 8.0, bottom: 8.0),
+                                    contentPadding: EdgeInsets.only(left: 11.0, top: 8.0, bottom: 8.0),
                                   ),
                                 ),
                               ),
@@ -139,8 +136,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 padding: EdgeInsets.all(3.0),
                                 child: TextField(
                                   onChanged: (val) {
-                                    findPlace(
-                                        dropOffTextEditingController.text);
+                                    findPlace(dropOffTextEditingController.text);
                                   },
                                   controller: dropOffTextEditingController,
                                   decoration: InputDecoration(
@@ -149,8 +145,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                     filled: true,
                                     border: InputBorder.none,
                                     isDense: true,
-                                    contentPadding: EdgeInsets.only(
-                                        left: 11.0, top: 8.0, bottom: 8.0),
+                                    contentPadding: EdgeInsets.only(left: 11.0, top: 8.0, bottom: 8.0),
                                   ),
                                 ),
                               ),
@@ -165,22 +160,21 @@ class _SearchScreenState extends State<SearchScreen> {
               //Tile for prediction
 
               (placePredictionList.length > 0)
-                  ? Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                      child: ListView.separated(
+                  ? Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                        child: ListView.separated(
                           padding: EdgeInsets.all(0.0),
-
-                          separatorBuilder: (BuildContext context, int index) =>
-                              DividerWidget(),
+                          separatorBuilder: (BuildContext context, int index) => DividerWidget(),
                           itemCount: placePredictionList.length,
-                        itemBuilder: (context, index) {
-                          return PredictionTile(
-                            placePredictions: placePredictionList[index],
-                          );
-                        },
-                        shrinkWrap: true,
-                        physics: ClampingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return PredictionTile(
+                              placePredictions: placePredictionList[index],
+                            );
+                          },
+                          shrinkWrap: true,
+                          physics: ClampingScrollPhysics(),
+                        ),
                       ),
                     )
                   : Container(),
@@ -204,14 +198,10 @@ class _SearchScreenState extends State<SearchScreen> {
       if (res["status"] == "OK") {
         var predictions = res["predictions"];
         print(predictions);
-        var placesList = (predictions as List)
-            .map((e) => PlacePredictions.fromJson(e))
-            .toList();
+        var placesList = (predictions as List).map((e) => PlacePredictions.fromJson(e)).toList();
 
         setState(() {
           placePredictionList = placesList;
-
-
         });
       }
     }
@@ -222,10 +212,8 @@ class PredictionTile extends StatelessWidget {
   final PlacePredictions placePredictions;
   PredictionTile({Key key, this.placePredictions}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
-
     return MaterialButton(
       onPressed: () {
         getPlaceAddressDetails(placePredictions.placeId, context);
@@ -251,7 +239,7 @@ class PredictionTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                       placePredictions.mainText,
+                        placePredictions.mainText,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 16.0,
@@ -279,16 +267,20 @@ class PredictionTile extends StatelessWidget {
     );
   }
 
-  void getPlaceAddressDetails(String placeId, context)async {
-    showDialog(context: context, builder: (BuildContext context) => ProgressDialog(message: "Setting Dropoff, Please wait",));
+  void getPlaceAddressDetails(String placeId, context) async {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => ProgressDialog(
+              message: "Setting Dropoff, Please wait",
+            ));
     String placeDetailsUrl = "https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&key=$mapKey";
 
     var res = await RequestServices.getRequest(placeDetailsUrl);
     Navigator.pop(context);
-    if(res == "failed"){
+    if (res == "failed") {
       return;
     }
-    if(res["status"] == "OK"){
+    if (res["status"] == "OK") {
       Address address = Address();
       address.placeName = res["result"]["name"];
       address.placeId = placeId;

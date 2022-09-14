@@ -21,6 +21,20 @@ class RegisterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      // appBar: AppBar(
+      //   backgroundColor: Colors.white,
+      //   // leading: Icon(Icons.ar),
+      //   elevation: 0,
+      //   leading: IconButton(
+      //     color: Colors.black,
+      //     icon: Icon(Icons.arrow_back_ios),
+      //     iconSize: 20.0,
+      //     onPressed: () {
+      //       Navigator.pop(context);
+      //     },
+      //   ),
+      //   centerTitle: true,
+      // ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(8.0),
@@ -42,7 +56,7 @@ class RegisterScreen extends StatelessWidget {
                 height: 15.0,
               ),
               Text(
-                'Signup as Rider',
+                'Signup as Passenger',
                 style: TextStyle(
                   fontSize: 24.0,
                   fontFamily: "Brand Bold",
@@ -62,8 +76,7 @@ class RegisterScreen extends StatelessWidget {
                       decoration: InputDecoration(
                         labelText: "Name",
                         labelStyle: TextStyle(fontSize: 14.0),
-                        hintStyle:
-                            TextStyle(color: Colors.grey, fontSize: 10.0),
+                        hintStyle: TextStyle(color: Colors.grey, fontSize: 10.0),
                       ),
                       style: TextStyle(fontSize: 14.0),
                     ),
@@ -76,8 +89,7 @@ class RegisterScreen extends StatelessWidget {
                       decoration: InputDecoration(
                         labelText: "Email",
                         labelStyle: TextStyle(fontSize: 14.0),
-                        hintStyle:
-                            TextStyle(color: Colors.grey, fontSize: 10.0),
+                        hintStyle: TextStyle(color: Colors.grey, fontSize: 10.0),
                       ),
                       style: TextStyle(fontSize: 14.0),
                     ),
@@ -90,8 +102,7 @@ class RegisterScreen extends StatelessWidget {
                       decoration: InputDecoration(
                         labelText: "Phone",
                         labelStyle: TextStyle(fontSize: 14.0),
-                        hintStyle:
-                            TextStyle(color: Colors.grey, fontSize: 10.0),
+                        hintStyle: TextStyle(color: Colors.grey, fontSize: 10.0),
                       ),
                       style: TextStyle(fontSize: 14.0),
                     ),
@@ -104,8 +115,7 @@ class RegisterScreen extends StatelessWidget {
                       decoration: InputDecoration(
                         labelText: "Password",
                         labelStyle: TextStyle(fontSize: 14.0),
-                        hintStyle:
-                            TextStyle(color: Colors.grey, fontSize: 10.0),
+                        hintStyle: TextStyle(color: Colors.grey, fontSize: 10.0),
                       ),
                       style: TextStyle(fontSize: 14.0),
                     ),
@@ -120,26 +130,18 @@ class RegisterScreen extends StatelessWidget {
                             passwordTextEditingController.text.isEmpty) {
                           Fluttertoast.showToast(msg: "Fill up empty fields!");
                         } else if (nameTextEditingController.text.length < 4) {
-                          Fluttertoast.showToast(
-                              msg: "Name must be atleast 3 Characters!");
-                        } else if (!emailTextEditingController.text
-                                .contains("@") ||
-                            !emailTextEditingController.text.contains(".com")) {
-                          Fluttertoast.showToast(
-                              msg: "Email address is not valid!");
+                          Fluttertoast.showToast(msg: "Name must be atleast 3 Characters!");
+                        } else if (!emailTextEditingController.text.contains("@") || !emailTextEditingController.text.contains(".com")) {
+                          Fluttertoast.showToast(msg: "Email address is not valid!");
                         } else if (phoneTextEditingController.text.isEmpty) {
-                          Fluttertoast.showToast(
-                              msg: "Phone number is mandatory");
-                        } else if (passwordTextEditingController.text.length <
-                            6) {
-                          Fluttertoast.showToast(
-                              msg: "Password must be atleast 6 Characters!");
+                          Fluttertoast.showToast(msg: "Phone number is mandatory");
+                        } else if (passwordTextEditingController.text.length < 6) {
+                          Fluttertoast.showToast(msg: "Password must be atleast 6 Characters!");
                         } else {
-
                           registerNewUser(context);
                         }
                       },
-                      color: Colors.yellow,
+                      color: Colors.orange,
                       textColor: Colors.white,
                       child: Container(
                         height: 50,
@@ -153,16 +155,14 @@ class RegisterScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(24.0)),
+                      shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(24.0)),
                     ),
                   ],
                 ),
               ),
               MaterialButton(
                 onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, LoginScreen.idScreen, (route) => false);
+                  Navigator.pushNamedAndRemoveUntil(context, LoginScreen.idScreen, (route) => false);
                 },
                 child: Text(
                   'Already have an Account? Login here!',
@@ -176,20 +176,23 @@ class RegisterScreen extends StatelessWidget {
   }
 
   void registerNewUser(BuildContext context) async {
-    showDialog(context: context, barrierDismissible: false, builder: (context) {
-      return ProgressDialog(message: "Registering, Please wait...",);
-    });
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return ProgressDialog(
+            message: "Registering, Please wait...",
+          );
+        });
     final User user = (await firebaseAuth
-            .createUserWithEmailAndPassword(
-                email: emailTextEditingController.text,
-                password: passwordTextEditingController.text)
+            .createUserWithEmailAndPassword(email: emailTextEditingController.text, password: passwordTextEditingController.text)
             .catchError((errMsg) {
       Navigator.pop(context);
       Fluttertoast.showToast(msg: "Error: " + errMsg.toString());
     }))
         .user;
 
-    if(user != null){
+    if (user != null) {
       usersRef.child(user.uid);
 
       Map userDataMap = {
@@ -202,7 +205,7 @@ class RegisterScreen extends StatelessWidget {
       Fluttertoast.showToast(msg: "New user account has been created!");
 
       Navigator.pushNamedAndRemoveUntil(context, HomeScreen.idScreen, (route) => false);
-    }else{
+    } else {
       Navigator.pop(context);
       Fluttertoast.showToast(msg: "New user account has not been created!");
     }

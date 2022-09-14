@@ -40,7 +40,7 @@ class LoginScreen extends StatelessWidget {
                 height: 15.0,
               ),
               Text(
-                'Login as Rider',
+                'Login as Passenger',
                 style: TextStyle(
                   fontSize: 24.0,
                   fontFamily: "Brand Bold",
@@ -60,8 +60,7 @@ class LoginScreen extends StatelessWidget {
                       decoration: InputDecoration(
                         labelText: "Email",
                         labelStyle: TextStyle(fontSize: 14.0),
-                        hintStyle:
-                            TextStyle(color: Colors.grey, fontSize: 10.0),
+                        hintStyle: TextStyle(color: Colors.grey, fontSize: 10.0),
                       ),
                       style: TextStyle(fontSize: 14.0),
                     ),
@@ -74,8 +73,7 @@ class LoginScreen extends StatelessWidget {
                       decoration: InputDecoration(
                         labelText: "Password",
                         labelStyle: TextStyle(fontSize: 14.0),
-                        hintStyle:
-                            TextStyle(color: Colors.grey, fontSize: 10.0),
+                        hintStyle: TextStyle(color: Colors.grey, fontSize: 10.0),
                       ),
                       style: TextStyle(fontSize: 14.0),
                     ),
@@ -84,18 +82,15 @@ class LoginScreen extends StatelessWidget {
                     ),
                     MaterialButton(
                       onPressed: () {
-                        if (!emailTextEditingController.text.contains("@") ||
-                            !emailTextEditingController.text.contains(".com")) {
-                          Fluttertoast.showToast(
-                              msg: "Email address is not valid!");
+                        if (!emailTextEditingController.text.contains("@") || !emailTextEditingController.text.contains(".com")) {
+                          Fluttertoast.showToast(msg: "Email address is not valid!");
                         } else if (passwordTextEditingController.text.isEmpty) {
-                          Fluttertoast.showToast(
-                              msg: "Password is not valid!");
-                        }else {
+                          Fluttertoast.showToast(msg: "Password is not valid!");
+                        } else {
                           loginAndAuthenticateUser(context);
                         }
                       },
-                      color: Colors.yellow,
+                      color: Colors.orange,
                       textColor: Colors.white,
                       child: Container(
                         height: 50,
@@ -109,16 +104,14 @@ class LoginScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(24.0)),
+                      shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(24.0)),
                     ),
                   ],
                 ),
               ),
               MaterialButton(
                 onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, RegisterScreen.idScreen, (route) => false);
+                  Navigator.pushNamedAndRemoveUntil(context, RegisterScreen.idScreen, (route) => false);
                 },
                 child: Text(
                   'Do not have an Account? Register here!',
@@ -132,32 +125,33 @@ class LoginScreen extends StatelessWidget {
   }
 
   void loginAndAuthenticateUser(BuildContext context) async {
-
-    showDialog(context: context, barrierDismissible: false, builder: (context) {
-      return ProgressDialog(message: "Authenticating, Please wait...",);
-    });
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return ProgressDialog(
+            message: "Authenticating, Please wait...",
+          );
+        });
     final User user = (await firebaseAuth
-            .signInWithEmailAndPassword(
-                email: emailTextEditingController.text,
-                password: passwordTextEditingController.text)
+            .signInWithEmailAndPassword(email: emailTextEditingController.text, password: passwordTextEditingController.text)
             .catchError((errMsg) {
-              Navigator.pop(context);
+      Navigator.pop(context);
       Fluttertoast.showToast(msg: "Error: " + errMsg.toString());
     }))
         .user;
 
     if (user != null) {
       usersRef.child(user.uid).once().then((DataSnapshot snap) {
-            if (snap.value != null) {
-              Fluttertoast.showToast(msg: "Successfully login!");
+        if (snap.value != null) {
+          Fluttertoast.showToast(msg: "Successfully login!");
 
-              Navigator.pushNamedAndRemoveUntil(
-                  context, HomeScreen.idScreen, (route) => false);
-            } else {
-              Navigator.pop(context);
-              Fluttertoast.showToast(msg: "Invalid credentials");
-            }
-          });
+          Navigator.pushNamedAndRemoveUntil(context, HomeScreen.idScreen, (route) => false);
+        } else {
+          Navigator.pop(context);
+          Fluttertoast.showToast(msg: "Invalid credentials");
+        }
+      });
     } else {
       Navigator.pop(context);
       Fluttertoast.showToast(msg: "An error occurred, cannot sign in!");
