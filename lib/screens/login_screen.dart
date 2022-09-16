@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:fake_taxi/main.dart';
 import 'package:fake_taxi/screens/home_screen.dart';
 import 'package:fake_taxi/screens/register_screen.dart';

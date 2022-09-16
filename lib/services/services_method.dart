@@ -1,3 +1,5 @@
+// ignore_for_file: await_only_futures
+
 import 'package:fake_taxi/config_maps.dart';
 import 'package:fake_taxi/datahandler/app_data.dart';
 import 'package:fake_taxi/models/address.dart';
@@ -10,15 +12,15 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
-class ServicesMethod{
+class ServicesMethod {
   static Future<String> searchCoordinateAddress(Position position, context) async {
     String placeAddress = "";
-    String st1, st2,st3,st4,st5;
+    String st1, st2, st3, st4, st5;
     String url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=${position.latitude},${position.longitude}&key=$mapKey";
 
     var response = await RequestServices.getRequest(url);
 
-    if(response != "failed"){
+    if (response != "failed") {
       //Full Address
       //placeAddress = response["results"][0]["formatted_address"];
 
@@ -40,12 +42,13 @@ class ServicesMethod{
     return placeAddress;
   }
 
-  static Future<DirectionDetails> getPlaceDirectionDetails(LatLng initialPosition, LatLng finalPosition) async{
-    String directionUrl = "https://maps.googleapis.com/maps/api/directions/json?origin=${initialPosition.latitude},${initialPosition.longitude}&destination=${finalPosition.latitude},${finalPosition.longitude}&key=$mapKey";
+  static Future<DirectionDetails> getPlaceDirectionDetails(LatLng initialPosition, LatLng finalPosition) async {
+    String directionUrl =
+        "https://maps.googleapis.com/maps/api/directions/json?origin=${initialPosition.latitude},${initialPosition.longitude}&destination=${finalPosition.latitude},${finalPosition.longitude}&key=$mapKey";
 
     var res = await RequestServices.getRequest(directionUrl);
 
-    if(res == "failed"){
+    if (res == "failed") {
       return null;
     }
 
@@ -59,12 +62,12 @@ class ServicesMethod{
     return directionDetails;
   }
 
-  static int calculateFares(DirectionDetails directionDetails){
+  static int calculateFares(DirectionDetails directionDetails) {
     //in terms of USD
     double timeTraveledFare = (directionDetails.durationValue / 60) * 0.20;
     double distanceTraveledFare = (directionDetails.durationValue / 1000) * 0.20;
 
-    double totalFareAmount= timeTraveledFare + distanceTraveledFare;
+    double totalFareAmount = timeTraveledFare + distanceTraveledFare;
 
     //Local Currency
     //1$ = 50 PESO
@@ -78,9 +81,8 @@ class ServicesMethod{
     String userId = firebaseUser.uid;
     DatabaseReference reference = FirebaseDatabase.instance.reference().child("users").child(userId);
 
-    reference.once().then((DataSnapshot dataSnapshot ){
+    reference.once().then((DataSnapshot dataSnapshot) {
       userCurrentInfo = Users.fromSnapshot(dataSnapshot);
     });
-
   }
 }

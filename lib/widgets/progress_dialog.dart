@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 
 class ProgressDialog extends StatelessWidget {
@@ -34,7 +36,6 @@ class ProgressDialog extends StatelessWidget {
                 ),
               ),
             ],
-
           ),
         ),
       ),

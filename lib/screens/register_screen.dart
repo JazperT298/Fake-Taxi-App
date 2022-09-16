@@ -1,9 +1,10 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:fake_taxi/main.dart';
 import 'package:fake_taxi/screens/home_screen.dart';
 import 'package:fake_taxi/screens/login_screen.dart';
 import 'package:fake_taxi/widgets/progress_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 

@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:async';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -51,27 +53,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     ServicesMethod.getCurrentOnlineUserInfo();
   }
 
   void saveRideRequest() {
-    rideRequestRef =
-        FirebaseDatabase.instance.reference().child("Ride Requests").push();
+    rideRequestRef = FirebaseDatabase.instance.reference().child("Ride Requests").push();
 
     var pickUp = Provider.of<AppData>(context, listen: false).pickUpLocation;
     var dropOff = Provider.of<AppData>(context, listen: false).dropOffLocation;
 
-    Map pickUpLocationMap = {
-      "latitude": pickUp.latitude.toString(),
-      "longtitude": pickUp.longtitude.toString()
-    };
+    Map pickUpLocationMap = {"latitude": pickUp.latitude.toString(), "longtitude": pickUp.longtitude.toString()};
 
-    Map dropOffLocationMap = {
-      "latitude": dropOff.latitude.toString(),
-      "longtitude": dropOff.longtitude.toString()
-    };
+    Map dropOffLocationMap = {"latitude": dropOff.latitude.toString(), "longtitude": dropOff.longtitude.toString()};
 
     Map rideInfoMap = {
       "driver_id": "waiting",
@@ -88,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     rideRequestRef.set(rideInfoMap);
   }
 
-  void cancelRideRequest(){
+  void cancelRideRequest() {
     rideRequestRef.remove();
   }
 
@@ -131,19 +125,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   void locatePosition() async {
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     currentPosition = position;
 
     LatLng latLngPosition = LatLng(position.latitude, position.longitude);
 
-    CameraPosition cameraPosition =
-        new CameraPosition(target: latLngPosition, zoom: 15);
-    newGoogleMapController
-        .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
+    CameraPosition cameraPosition = new CameraPosition(target: latLngPosition, zoom: 15);
+    newGoogleMapController.animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
 
-    String address =
-        await ServicesMethod.searchCoordinateAddress(position, context);
+    String address = await ServicesMethod.searchCoordinateAddress(position, context);
     print("This is your address " + address);
   }
 
@@ -189,8 +179,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         children: [
                           Text(
                             'Profile name',
-                            style: TextStyle(
-                                fontSize: 16.0, fontFamily: "Brand bold"),
+                            style: TextStyle(fontSize: 16.0, fontFamily: "Brand bold"),
                           ),
                           SizedBox(
                             height: 6.0,
@@ -299,20 +288,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   }
                 },
                 child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(22.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black,
-                          blurRadius: 6.0,
-                          spreadRadius: 0.5,
-                          offset: Offset(
-                            0.7,
-                            0.7,
-                          ),
-                        ),
-                      ]),
+                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(22.0), boxShadow: [
+                    BoxShadow(
+                      color: Colors.black,
+                      blurRadius: 6.0,
+                      spreadRadius: 0.5,
+                      offset: Offset(
+                        0.7,
+                        0.7,
+                      ),
+                    ),
+                  ]),
                   child: CircleAvatar(
                     backgroundColor: Colors.white,
                     child: Icon(
@@ -349,8 +335,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         ),
                       ]),
                   child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
+                    padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -365,18 +350,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         ),
                         Text(
                           'Where to?',
-                          style:
-                              TextStyle(fontSize: 20.0, fontFamily: "Brand bold"),
+                          style: TextStyle(fontSize: 20.0, fontFamily: "Brand bold"),
                         ),
                         SizedBox(
                           height: 20.0,
                         ),
                         GestureDetector(
                           onTap: () async {
-                            var res = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SearchScreen()));
+                            var res = await Navigator.push(context, MaterialPageRoute(builder: (context) => SearchScreen()));
                             if (res == "getDirection") {
                               displayRideDetailsContainer();
                               //await getPlaceDirection();
@@ -432,12 +413,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                   // margin: EdgeInsets.only(right: 13.0),
                                   width: MediaQuery.of(context).size.width / 1.30,
                                   child: Text(
-                                    Provider.of<AppData>(context)
-                                                .pickUpLocation !=
-                                            null
-                                        ? Provider.of<AppData>(context)
-                                            .pickUpLocation
-                                            .placeName
+                                    Provider.of<AppData>(context).pickUpLocation != null
+                                        ? Provider.of<AppData>(context).pickUpLocation.placeName
                                         : "Add Home",
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -561,9 +538,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                       ),
                                     ),
                                     Text(
-                                      ((tripDirectionDetails != null
-                                          ? tripDirectionDetails.distanceText
-                                          : '')),
+                                      ((tripDirectionDetails != null ? tripDirectionDetails.distanceText : '')),
                                       style: TextStyle(
                                         fontSize: 16.0,
                                         fontFamily: "Brand bold",
@@ -575,10 +550,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                   child: Container(),
                                 ),
                                 Text(
-                                  ((tripDirectionDetails != null
-                                      ? '\₱ ' +
-                                          '${ServicesMethod.calculateFares(tripDirectionDetails)}'
-                                      : '')),
+                                  ((tripDirectionDetails != null ? '\₱ ' + '${ServicesMethod.calculateFares(tripDirectionDetails)}' : '')),
                                   style: TextStyle(
                                     fontFamily: "Brand bold",
                                   ),
@@ -633,10 +605,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 children: [
                                   Text(
                                     'Request',
-                                    style: TextStyle(
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white),
+                                    style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.white),
                                   ),
                                   Icon(
                                     FontAwesomeIcons.taxi,
@@ -782,8 +751,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   Future<void> getPlaceDirection() async {
-    var initialPos =
-        Provider.of<AppData>(context, listen: false).pickUpLocation;
+    var initialPos = Provider.of<AppData>(context, listen: false).pickUpLocation;
     var finalPos = Provider.of<AppData>(context, listen: false).dropOffLocation;
 
     var pickupLatLng = LatLng(initialPos.latitude, initialPos.longtitude);
@@ -795,8 +763,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               message: "Please wait...",
             ));
 
-    var details = await ServicesMethod.getPlaceDirectionDetails(
-        pickupLatLng, dropOffLatLng);
+    var details = await ServicesMethod.getPlaceDirectionDetails(pickupLatLng, dropOffLatLng);
     setState(() {
       tripDirectionDetails = details;
     });
@@ -806,14 +773,12 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     print(details.encodedPoints);
 
     PolylinePoints polylinePoints = PolylinePoints();
-    List<PointLatLng> decodePolylinePointsResult =
-        polylinePoints.decodePolyline(details.encodedPoints);
+    List<PointLatLng> decodePolylinePointsResult = polylinePoints.decodePolyline(details.encodedPoints);
 
     polylineCoordinates.clear();
     if (decodePolylinePointsResult.isNotEmpty) {
       decodePolylinePointsResult.forEach((PointLatLng pointLatLng) {
-        polylineCoordinates
-            .add(LatLng(pointLatLng.latitude, pointLatLng.longitude));
+        polylineCoordinates.add(LatLng(pointLatLng.latitude, pointLatLng.longitude));
       });
     }
     polylineSet.clear();
@@ -831,25 +796,19 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     });
 
     LatLngBounds latLngBounds;
-    if (pickupLatLng.latitude > dropOffLatLng.latitude &&
-        pickupLatLng.longitude > dropOffLatLng.longitude) {
-      latLngBounds =
-          LatLngBounds(southwest: dropOffLatLng, northeast: pickupLatLng);
+    if (pickupLatLng.latitude > dropOffLatLng.latitude && pickupLatLng.longitude > dropOffLatLng.longitude) {
+      latLngBounds = LatLngBounds(southwest: dropOffLatLng, northeast: pickupLatLng);
     } else if (pickupLatLng.latitude > dropOffLatLng.longitude) {
       latLngBounds = LatLngBounds(
-          southwest: LatLng(pickupLatLng.latitude, dropOffLatLng.longitude),
-          northeast: LatLng(dropOffLatLng.latitude, pickupLatLng.longitude));
+          southwest: LatLng(pickupLatLng.latitude, dropOffLatLng.longitude), northeast: LatLng(dropOffLatLng.latitude, pickupLatLng.longitude));
     } else if (pickupLatLng.latitude > dropOffLatLng.latitude) {
       latLngBounds = LatLngBounds(
-          southwest: LatLng(dropOffLatLng.latitude, pickupLatLng.longitude),
-          northeast: LatLng(pickupLatLng.latitude, dropOffLatLng.longitude));
+          southwest: LatLng(dropOffLatLng.latitude, pickupLatLng.longitude), northeast: LatLng(pickupLatLng.latitude, dropOffLatLng.longitude));
     } else {
-      latLngBounds =
-          LatLngBounds(southwest: pickupLatLng, northeast: dropOffLatLng);
+      latLngBounds = LatLngBounds(southwest: pickupLatLng, northeast: dropOffLatLng);
     }
 
-    newGoogleMapController
-        .animateCamera(CameraUpdate.newLatLngBounds(latLngBounds, 70));
+    newGoogleMapController.animateCamera(CameraUpdate.newLatLngBounds(latLngBounds, 70));
 
     Marker pickupLocationMaker = Marker(
       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
