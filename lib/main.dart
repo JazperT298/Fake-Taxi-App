@@ -15,15 +15,17 @@ void main() async {
 }
 
 DatabaseReference usersRef = FirebaseDatabase.instance.reference().child('users');
+DatabaseReference driversRef = FirebaseDatabase.instance.reference().child("drivers");
+DatabaseReference rideRequestRef = FirebaseDatabase.instance.reference().child("Ride Requests");
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => AppData() ,
+      create: (context) => AppData(),
       child: MaterialApp(
-        title: 'Fake Taxi',
+        title: 'Heat Map',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: "Brand Bold",
@@ -32,12 +34,11 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: FirebaseAuth.instance.currentUser == null ? LoginScreen.idScreen : HomeScreen.idScreen,
         routes: {
-          RegisterScreen.idScreen: (context ) => RegisterScreen(),
-          LoginScreen.idScreen: (context ) => LoginScreen(),
-          HomeScreen.idScreen: (context ) => HomeScreen(),
+          RegisterScreen.idScreen: (context) => RegisterScreen(),
+          LoginScreen.idScreen: (context) => LoginScreen(),
+          HomeScreen.idScreen: (context) => HomeScreen(),
         },
       ),
     );
   }
 }
-
