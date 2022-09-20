@@ -9,13 +9,21 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   static const String idScreen = "login";
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailTextEditingController = TextEditingController();
+
   TextEditingController passwordTextEditingController = TextEditingController();
 
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+
+  bool isObscure = true;
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +35,12 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             children: [
               SizedBox(
-                height: 45.0,
+                height: 60.0,
               ),
               Center(
                 child: Image(
                   image: AssetImage(
-                    "assets/images/logo.png",
+                    "assets/images/playstore.png",
                   ),
                   width: 300.0,
                   height: 300.0,
@@ -61,23 +69,47 @@ class LoginScreen extends StatelessWidget {
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         labelText: "Email",
-                        labelStyle: TextStyle(fontSize: 14.0),
+                        labelStyle: TextStyle(fontSize: 16.0),
                         hintStyle: TextStyle(color: Colors.grey, fontSize: 10.0),
                       ),
-                      style: TextStyle(fontSize: 14.0),
+                      style: TextStyle(fontSize: 16.0),
                     ),
                     SizedBox(
                       height: 1.0,
                     ),
                     TextField(
                       controller: passwordTextEditingController,
-                      obscureText: true,
+                      obscureText: isObscure,
                       decoration: InputDecoration(
                         labelText: "Password",
-                        labelStyle: TextStyle(fontSize: 14.0),
+                        labelStyle: TextStyle(fontSize: 16.0),
                         hintStyle: TextStyle(color: Colors.grey, fontSize: 10.0),
+                        suffix: InkWell(
+                          onTap: () {
+                            setState(() {
+                              if (isObscure == false) {
+                                isObscure = true;
+                              } else {
+                                isObscure = false;
+                              }
+                            });
+                          },
+                          child: isObscure != false
+                              ? Text(
+                                  'SHOW',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                )
+                              : Text(
+                                  'HIDE',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                        ),
                       ),
-                      style: TextStyle(fontSize: 14.0),
+                      style: TextStyle(fontSize: 16.0),
                     ),
                     SizedBox(
                       height: 30.0,
@@ -92,7 +124,7 @@ class LoginScreen extends StatelessWidget {
                           loginAndAuthenticateUser(context);
                         }
                       },
-                      color: Colors.orange,
+                      color: Colors.green,
                       textColor: Colors.white,
                       child: Container(
                         height: 50,

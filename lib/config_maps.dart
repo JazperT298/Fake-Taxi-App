@@ -18,4 +18,4 @@ String title = "";
 String carRideType = "";
 
 String serverToken =
-    "key=AAAAgyudES0:APA91bGZjOc3Dje2kxGTfvUicXFA8XaeOGB3WTpcp0DxBEOwondnXAVt-_koh_l_iJGeO6Czt2mEq8x65EvDuJIZ_LCqgY0hkWQ3bqU5mBjspjCMAdz_pQ8QBNyru3AFLuWIgq9op3cs";
+    "key=AAAAocy8t8A:APA91bE7InvRTHqWFoz6c37iSjkVZldrgMvuSKGaYpi7H98WazobqCC4sHLzDUSSBdf9DUdkNiPdHPIbhuHQdxyMx-hYI98QAFl8cLsudZ2XMgMYKLTXGKtqWSHuym2d4RNxNY4Ps0Mu";

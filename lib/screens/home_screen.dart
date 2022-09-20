@@ -34,7 +34,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
-  static const String idScreen = "mainScreen";
+  static const String idScreen = "homeScreen";
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -235,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   void displayRequestRideContainer() {
     setState(() {
-      requestRideContainerHeight = 165.0;
+      requestRideContainerHeight = 230.0;
       rideDetailsContainerHeight = 0;
       bottomPaddingOfMap = 230;
       drawerOpen = false;
@@ -293,7 +293,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
     setState(() {
       searchContainerHeight = 0;
-      rideDetailsContainerHeight = 230.0;
+      rideDetailsContainerHeight = 290.0;
       bottomPaddingOfMap = 230;
       drawerOpen = false;
     });
@@ -342,7 +342,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   child: Row(
                     children: [
                       Image.asset(
-                        "images/user_icon.png",
+                        "assets/images/user_icon.png",
                         height: 65.0,
                         width: 65.0,
                       ),
@@ -351,6 +351,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             uName,
@@ -378,53 +379,47 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               ),
 
               //Drawer Body Contrllers
-              GestureDetector(
+              ListTile(
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => HistoryScreen()));
                 },
-                child: ListTile(
-                  leading: Icon(Icons.history),
-                  title: Text(
-                    "History",
-                    style: TextStyle(fontSize: 15.0),
-                  ),
+                leading: Icon(Icons.history),
+                title: Text(
+                  "History",
+                  style: TextStyle(fontSize: 15.0),
                 ),
               ),
-              GestureDetector(
+              ListTile(
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileTabPage()));
                 },
-                child: ListTile(
-                  leading: Icon(Icons.person),
-                  title: Text(
-                    "Visit Profile",
-                    style: TextStyle(fontSize: 15.0),
-                  ),
+                leading: Icon(Icons.person),
+                title: Text(
+                  "Visit Profile",
+                  style: TextStyle(fontSize: 15.0),
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AboutScreen()));
-                },
-                child: ListTile(
-                  leading: Icon(Icons.info),
-                  title: Text(
-                    "About",
-                    style: TextStyle(fontSize: 15.0),
-                  ),
-                ),
-              ),
-              GestureDetector(
+              // GestureDetector(
+              //   onTap: () {
+              //     Navigator.push(context, MaterialPageRoute(builder: (context) => AboutScreen()));
+              //   },
+              //   child: ListTile(
+              //     leading: Icon(Icons.info),
+              //     title: Text(
+              //       "About",
+              //       style: TextStyle(fontSize: 15.0),
+              //     ),
+              //   ),
+              // ),
+              ListTile(
                 onTap: () {
                   FirebaseAuth.instance.signOut();
                   Navigator.pushNamedAndRemoveUntil(context, LoginScreen.idScreen, (route) => false);
                 },
-                child: ListTile(
-                  leading: Icon(Icons.logout),
-                  title: Text(
-                    "Sign Out",
-                    style: TextStyle(fontSize: 15.0),
-                  ),
+                leading: Icon(Icons.logout),
+                title: Text(
+                  "Sign Out",
+                  style: TextStyle(fontSize: 15.0),
                 ),
               ),
             ],
@@ -526,8 +521,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     children: [
                       SizedBox(height: 6.0),
                       Text(
-                        "Hi there,",
-                        style: TextStyle(fontSize: 12.0),
+                        // "Hi ${userCurrentInfo.name}!",
+                        "Hi there!",
+                        style: TextStyle(fontSize: 16.0),
                       ),
                       Text(
                         "Where to?",
@@ -537,8 +533,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       GestureDetector(
                         onTap: () async {
                           var res = await Navigator.push(context, MaterialPageRoute(builder: (context) => SearchScreen()));
-
+                          print('res $res');
                           if (res == "obtainDirection") {
+                            displayRideDetailsContainer();
+                          } else {
                             displayRideDetailsContainer();
                           }
                         },
@@ -585,10 +583,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                Provider.of<AppData>(context).pickUpLocation != null
-                                    ? Provider.of<AppData>(context).pickUpLocation.placeName
-                                    : "Add Home",
+                              Container(
+                                width: MediaQuery.of(context).size.width / 1.30,
+                                child: Text(
+                                  Provider.of<AppData>(context).pickUpLocation != null
+                                      ? Provider.of<AppData>(context).pickUpLocation.placeName
+                                      : "Add Home",
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                               SizedBox(
                                 height: 4.0,
@@ -668,11 +670,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       //bike ride
                       GestureDetector(
                         onTap: () {
-                          displayToastMessage("searching Bike...", context);
+                          displayToastMessage("searching Motorcyle...", context);
 
                           setState(() {
                             state = "requesting";
-                            carRideType = "bike";
+                            carRideType = "Motorcyle";
                           });
                           displayRequestRideContainer();
                           availableDrivers = GeoFireServices.nearByAvailableDriversList;
@@ -685,8 +687,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             child: Row(
                               children: [
                                 Image.asset(
-                                  "images/bike.png",
-                                  height: 70.0,
+                                  "assets/images/taxi.png",
+                                  height: 50.0,
                                   width: 80.0,
                                 ),
                                 SizedBox(
@@ -713,7 +715,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 ),
                                 Expanded(child: Container()),
                                 Text(
-                                  ((tripDirectionDetails != null) ? '\$${(ServicesMethod.calculateFares(tripDirectionDetails)) / 2}' : ''),
+                                  ((tripDirectionDetails != null) ? '₱ ${(ServicesMethod.calculateFares(tripDirectionDetails)) / 2}' : ''),
                                   style: TextStyle(
                                     fontFamily: "Brand Bold",
                                   ),
@@ -735,14 +737,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         height: 10.0,
                       ),
 
-                      //uber-go ride
+                      // //uber-go ride
                       GestureDetector(
                         onTap: () {
-                          displayToastMessage("searching Uber-Go...", context);
+                          displayToastMessage("searching Taxi...", context);
 
                           setState(() {
                             state = "requesting";
-                            carRideType = "uber-go";
+                            carRideType = "Taxi";
                           });
                           displayRequestRideContainer();
                           availableDrivers = GeoFireServices.nearByAvailableDriversList;
@@ -755,8 +757,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             child: Row(
                               children: [
                                 Image.asset(
-                                  "images/ubergo.png",
-                                  height: 70.0,
+                                  "assets/images/taxi.png",
+                                  height: 50.0,
                                   width: 80.0,
                                 ),
                                 SizedBox(
@@ -766,7 +768,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Uber-Go",
+                                      "Taxi",
                                       style: TextStyle(
                                         fontSize: 18.0,
                                         fontFamily: "Brand Bold",
@@ -783,7 +785,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 ),
                                 Expanded(child: Container()),
                                 Text(
-                                  ((tripDirectionDetails != null) ? '\$${ServicesMethod.calculateFares(tripDirectionDetails)}' : ''),
+                                  ((tripDirectionDetails != null) ? '₱ ${ServicesMethod.calculateFares(tripDirectionDetails)}' : ''),
                                   style: TextStyle(
                                     fontFamily: "Brand Bold",
                                   ),
@@ -805,14 +807,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         height: 10.0,
                       ),
 
-                      //uber-x ride
+                      // uber-x ride
                       GestureDetector(
                         onTap: () {
-                          displayToastMessage("searching Uber-X...", context);
+                          displayToastMessage("searching Motorela...", context);
 
                           setState(() {
                             state = "requesting";
-                            carRideType = "uber-x";
+                            carRideType = "Motorela";
                           });
                           displayRequestRideContainer();
                           availableDrivers = GeoFireServices.nearByAvailableDriversList;
@@ -825,8 +827,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             child: Row(
                               children: [
                                 Image.asset(
-                                  "images/uberx.png",
-                                  height: 70.0,
+                                  "assets/images/taxi.png",
+                                  height: 50.0,
                                   width: 80.0,
                                 ),
                                 SizedBox(
@@ -836,7 +838,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Uber-X",
+                                      "Motorela",
                                       style: TextStyle(
                                         fontSize: 18.0,
                                         fontFamily: "Brand Bold",
@@ -853,7 +855,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 ),
                                 Expanded(child: Container()),
                                 Text(
-                                  ((tripDirectionDetails != null) ? '\$${(ServicesMethod.calculateFares(tripDirectionDetails)) * 2}' : ''),
+                                  ((tripDirectionDetails != null) ? '₱ ${(ServicesMethod.calculateFares(tripDirectionDetails)) * 2}' : ''),
                                   style: TextStyle(
                                     fontFamily: "Brand Bold",
                                   ),
@@ -1133,7 +1135,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     //               child: Row(
     //                 children: [
     //                   Image.asset(
-    //                     "assets/images/user_icon.png",
+    //                     "assets/assets/images/user_icon.png",
     //                     height: 65.0,
     //                     width: 65.0,
     //                   ),
@@ -1486,7 +1488,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     //                         child: Row(
     //                           children: [
     //                             Image.asset(
-    //                               "assets/images/taxi.png",
+    //                               "assets/assets/images/taxi.png",
     //                               height: 70.0,
     //                               width: 80.0,
     //                             ),
@@ -1896,7 +1898,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   void createIconMarker() {
     if (nearByIcon == null) {
       ImageConfiguration imageConfiguration = createLocalImageConfiguration(context, size: Size(2, 2));
-      BitmapDescriptor.fromAssetImage(imageConfiguration, "images/car_ios.png").then((value) {
+      BitmapDescriptor.fromAssetImage(imageConfiguration, "assets/images/car_ios.png").then((value) {
         nearByIcon = value;
       });
     }

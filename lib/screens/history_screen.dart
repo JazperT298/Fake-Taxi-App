@@ -14,7 +14,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Trip History'),
-        backgroundColor: Colors.black87,
+        backgroundColor: Colors.grey,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);

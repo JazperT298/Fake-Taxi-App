@@ -288,8 +288,7 @@ class PredictionTile extends StatelessWidget {
       address.longtitude = res["result"]["geometry"]["location"]["lng"];
 
       Provider.of<AppData>(context, listen: false).updateDropOffLocationAddress(address);
-      print("This is drop off");
-      print(address.placeName);
+      print("This is drop off ${address.placeName}");
 
       Navigator.pop(context, "getDirection");
     }
