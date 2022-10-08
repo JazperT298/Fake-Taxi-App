@@ -71,8 +71,8 @@ class ServicesMethod {
 
   static int calculateFares(DirectionDetails directionDetails) {
     //in terms of USD
-    double timeTraveledFare = (directionDetails.durationValue / 60) * 0.20;
-    double distanceTraveledFare = (directionDetails.durationValue / 1000) * 0.20;
+    double timeTraveledFare = (directionDetails.durationValue / 60) * 0.10;
+    double distanceTraveledFare = (directionDetails.durationValue / 1000) * 0.10;
 
     double totalFareAmount = timeTraveledFare + distanceTraveledFare;
 

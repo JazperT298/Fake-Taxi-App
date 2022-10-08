@@ -118,6 +118,7 @@ class _RatingScreenState extends State<RatingScreen> {
                     });
 
                     Navigator.pop(context);
+                    starCounter = 0.0;
                   },
                   color: Colors.green,
                   child: Padding(

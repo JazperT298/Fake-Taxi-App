@@ -77,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   bool isRequestingPositionDetails = false;
 
   String uName = "";
+  var currentFormat;
 
   @override
   void initState() {
@@ -293,7 +294,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
     setState(() {
       searchContainerHeight = 0;
-      rideDetailsContainerHeight = 290.0;
+      rideDetailsContainerHeight = 280.0;
       bottomPaddingOfMap = 230;
       drawerOpen = false;
     });
@@ -325,6 +326,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    Locale locale = Localizations.localeOf(context);
+    currentFormat = NumberFormat.simpleCurrency(locale: locale.toString());
     createIconMarker();
     return Scaffold(
       key: scaffoldKey,
@@ -667,14 +670,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   padding: EdgeInsets.symmetric(vertical: 17.0),
                   child: Column(
                     children: [
-                      //bike ride
+                      //Motorcycle ride
                       GestureDetector(
                         onTap: () {
-                          displayToastMessage("searching Motorcyle...", context);
+                          displayToastMessage("Searching Multicab...", context);
 
                           setState(() {
                             state = "requesting";
-                            carRideType = "Motorcyle";
+                            carRideType = "Multicab";
                           });
                           displayRequestRideContainer();
                           availableDrivers = GeoFireServices.nearByAvailableDriversList;
@@ -698,7 +701,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Bike",
+                                      "Multicab",
                                       style: TextStyle(
                                         fontSize: 18.0,
                                         fontFamily: "Brand Bold",
@@ -715,7 +718,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 ),
                                 Expanded(child: Container()),
                                 Text(
-                                  ((tripDirectionDetails != null) ? '₱ ${(ServicesMethod.calculateFares(tripDirectionDetails)) / 2}' : ''),
+                                  ((tripDirectionDetails != null)
+                                      ? 'Php 10.00'
+                                      : ''), //${(ServicesMethod.calculateFares(tripDirectionDetails))}' : ''),
                                   style: TextStyle(
                                     fontFamily: "Brand Bold",
                                   ),
@@ -737,77 +742,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         height: 10.0,
                       ),
 
-                      // //uber-go ride
-                      GestureDetector(
-                        onTap: () {
-                          displayToastMessage("searching Taxi...", context);
-
-                          setState(() {
-                            state = "requesting";
-                            carRideType = "Taxi";
-                          });
-                          displayRequestRideContainer();
-                          availableDrivers = GeoFireServices.nearByAvailableDriversList;
-                          searchNearestDriver();
-                        },
-                        child: Container(
-                          width: double.infinity,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 16.0),
-                            child: Row(
-                              children: [
-                                Image.asset(
-                                  "assets/images/taxi.png",
-                                  height: 50.0,
-                                  width: 80.0,
-                                ),
-                                SizedBox(
-                                  width: 16.0,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Taxi",
-                                      style: TextStyle(
-                                        fontSize: 18.0,
-                                        fontFamily: "Brand Bold",
-                                      ),
-                                    ),
-                                    Text(
-                                      ((tripDirectionDetails != null) ? tripDirectionDetails.distanceText : ''),
-                                      style: TextStyle(
-                                        fontSize: 16.0,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Expanded(child: Container()),
-                                Text(
-                                  ((tripDirectionDetails != null) ? '₱ ${ServicesMethod.calculateFares(tripDirectionDetails)}' : ''),
-                                  style: TextStyle(
-                                    fontFamily: "Brand Bold",
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      Divider(
-                        height: 2.0,
-                        thickness: 2.0,
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-
-                      // uber-x ride
+                      //Motorela ride
                       GestureDetector(
                         onTap: () {
                           displayToastMessage("searching Motorela...", context);
@@ -855,7 +790,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 ),
                                 Expanded(child: Container()),
                                 Text(
-                                  ((tripDirectionDetails != null) ? '₱ ${(ServicesMethod.calculateFares(tripDirectionDetails)) * 2}' : ''),
+                                  ((tripDirectionDetails != null)
+                                      ? 'Php 10.00'
+                                      : ''), //${ServicesMethod.calculateFares(tripDirectionDetails) / 3}' : ''),
                                   style: TextStyle(
                                     fontFamily: "Brand Bold",
                                   ),
@@ -876,6 +813,76 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       SizedBox(
                         height: 10.0,
                       ),
+
+                      // Taxi ride=
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     displayToastMessage("searching Taxi...", context);
+
+                      //     setState(() {
+                      //       state = "requesting";
+                      //       carRideType = "Taxi";
+                      //     });
+                      //     displayRequestRideContainer();
+                      //     availableDrivers = GeoFireServices.nearByAvailableDriversList;
+                      //     searchNearestDriver();
+                      // },
+                      // child: Container(
+                      //   width: double.infinity,
+                      //   child: Padding(
+                      //     padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      //     child: Row(
+                      //       children: [
+                      //         Image.asset(
+                      //           "assets/images/taxi.png",
+                      //           height: 50.0,
+                      //           width: 80.0,
+                      //         ),
+                      //         SizedBox(
+                      //           width: 16.0,
+                      //         ),
+                      //         Column(
+                      //           crossAxisAlignment: CrossAxisAlignment.start,
+                      //           children: [
+                      //             Text(
+                      //                 "Taxi",
+                      //                 style: TextStyle(
+                      //                   fontSize: 18.0,
+                      //                   fontFamily: "Brand Bold",
+                      //                 ),
+                      //               ),
+                      //               Text(
+                      //                 ((tripDirectionDetails != null) ? tripDirectionDetails.distanceText : ''),
+                      //                 style: TextStyle(
+                      //                   fontSize: 16.0,
+                      //                   color: Colors.grey,
+                      //                 ),
+                      //               ),
+                      //             ],
+                      //           ),
+                      //           Expanded(child: Container()),
+                      //           Text(
+                      //             ((tripDirectionDetails != null) ? 'Php ${(ServicesMethod.calculateFares(tripDirectionDetails)) * 2}' : ''),
+                      //             style: TextStyle(
+                      //               fontFamily: "Brand Bold",
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+
+                      // SizedBox(
+                      //   height: 10.0,
+                      // ),
+                      // Divider(
+                      //   height: 2.0,
+                      //   thickness: 2.0,
+                      // ),
+                      // SizedBox(
+                      //   height: 10.0,
+                      // ),
 
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 20.0),
