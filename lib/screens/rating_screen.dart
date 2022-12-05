@@ -13,6 +13,7 @@ class RatingScreen extends StatefulWidget {
 }
 
 class _RatingScreenState extends State<RatingScreen> {
+  double thisCounter = 0.0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +58,9 @@ class _RatingScreenState extends State<RatingScreen> {
                 size: 45,
                 onRated: (value) {
                   starCounter = value;
-
+                  setState(() {
+                    thisCounter = value;
+                  });
                   if (starCounter == 1) {
                     setState(() {
                       title = "Very Bad";
@@ -109,11 +112,11 @@ class _RatingScreenState extends State<RatingScreen> {
                     driverRatingRef.once().then((DataSnapshot snap) {
                       if (snap.value != null) {
                         double oldRatings = double.parse(snap.value.toString());
-                        double addRatings = oldRatings + starCounter;
+                        double addRatings = oldRatings + thisCounter;
                         double averageRatings = addRatings / 2;
                         driverRatingRef.set(averageRatings.toString());
                       } else {
-                        driverRatingRef.set(starCounter.toString());
+                        driverRatingRef.set(thisCounter.toString());
                       }
                     });
 

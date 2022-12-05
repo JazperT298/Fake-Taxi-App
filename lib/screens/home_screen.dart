@@ -129,6 +129,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           driverphone = event.snapshot.value["driver_phone"].toString();
         });
       }
+      if (event.snapshot.value["imageUrl"] != null) {
+        setState(() {
+          driverImage = event.snapshot.value["imageUrl"].toString();
+        });
+      }
 
       if (event.snapshot.value["driver_location"] != null) {
         double driverLat = double.parse(event.snapshot.value["driver_location"]["latitude"].toString());
@@ -282,6 +287,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       statusRide = "";
       driverName = "";
       driverphone = "";
+      driverImage = "";
       carDetailsDriver = "";
       rideStatus = "Driver is Coming";
       driverDetailsContainerHeight = 0.0;
@@ -690,7 +696,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             child: Row(
                               children: [
                                 Image.asset(
-                                  "assets/images/taxi.png",
+                                  "assets/images/multicab.png",
                                   height: 50.0,
                                   width: 80.0,
                                 ),
@@ -762,7 +768,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                             child: Row(
                               children: [
                                 Image.asset(
-                                  "assets/images/taxi.png",
+                                  "assets/images/playstore.png",
                                   height: 50.0,
                                   width: 80.0,
                                 ),
@@ -955,7 +961,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                           "Please wait...",
                           "Finding a Driver...",
                         ],
-                        textStyle: TextStyle(fontSize: 55.0, fontFamily: "Signatra"),
+                        textStyle: TextStyle(fontSize: 40.0, fontWeight: FontWeight.bold), //fontFamily: "Signatra"),
                         colors: [
                           Colors.green,
                           Colors.purple,
@@ -1062,12 +1068,30 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       carDetailsDriver,
                       style: TextStyle(color: Colors.grey),
                     ),
-                    Text(
-                      driverName,
-                      style: TextStyle(fontSize: 20.0),
+                    SizedBox(
+                      height: 8.0,
+                    ),
+                    Row(
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: Colors.grey,
+                          radius: 20.0,
+                          child: CircleAvatar(
+                            backgroundImage: NetworkImage(driverImage),
+                            radius: 19.0,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 8.0,
+                        ),
+                        Text(
+                          driverName,
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                      ],
                     ),
                     SizedBox(
-                      height: 22.0,
+                      height: 8.0,
                     ),
                     Divider(
                       height: 2.0,
@@ -1904,8 +1928,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   void createIconMarker() {
     if (nearByIcon == null) {
-      ImageConfiguration imageConfiguration = createLocalImageConfiguration(context, size: Size(2, 2));
-      BitmapDescriptor.fromAssetImage(imageConfiguration, "assets/images/car_ios.png").then((value) {
+      ImageConfiguration imageConfiguration = createLocalImageConfiguration(context, size: Size(30, 30));
+      BitmapDescriptor.fromAssetImage(imageConfiguration, "assets/images/pickicon.png").then((value) {
         nearByIcon = value;
       });
     }
@@ -1932,7 +1956,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           notifyDriver(driver);
           availableDrivers.removeAt(0);
         } else {
-          displayToastMessage(carRideType + " drivers not available. Try again.", context);
+          displayToastMessage(carRideType + " Drivers not available. Try again.", context);
         }
       } else {
         displayToastMessage("No car found. Try again.", context);

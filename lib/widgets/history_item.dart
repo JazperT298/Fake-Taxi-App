@@ -67,10 +67,10 @@ class HistoryItem extends StatelessWidget {
               SizedBox(
                 height: 15,
               ),
-              // Text(
-              //   ServicesMethod.formatTripDate(history.createdAt),
-              //   style: TextStyle(color: Colors.grey),
-              // ),
+              Text(
+                ServicesMethod.formatTripDate(history.createdAt),
+                style: TextStyle(color: Colors.grey),
+              ),
             ],
           ),
         ],

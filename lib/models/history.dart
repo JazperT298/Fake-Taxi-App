@@ -12,7 +12,7 @@ class History {
 
   History.fromSnapshot(DataSnapshot snapshot) {
     paymentMethod = snapshot.value["payment_method"];
-    createdAt = snapshot.value["created_at"];
+    createdAt = snapshot.value["create_at"];
     status = snapshot.value["status"];
     fares = snapshot.value["fares"];
     dropOff = snapshot.value["dropoff_address"];

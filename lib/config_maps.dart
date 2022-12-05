@@ -12,6 +12,7 @@ String rideStatus = "Driver is Coming";
 String carDetailsDriver = "";
 String driverName = "";
 String driverphone = "";
+String driverImage = "";
 
 double starCounter = 0.0;
 String title = "";
